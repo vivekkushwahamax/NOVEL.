@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Mr Novel Explainer</title>
+  <link rel="icon" type="image/jpeg" href="/images/logo.jpg">
+  <link rel="stylesheet" href="/css/style.css?v=3.2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+
+  <!-- ==============================================
+       1. LOGIN SCREEN (Shown when not authenticated)
+       ============================================== -->
+  <div id="loginSection" class="login-screen-wrap">
+    <div class="login-card">
+      <img src="/images/logo.jpg" alt="Mr Novel Explainer Logo" class="brand-logo-img" style="width:76px; height:76px; margin-bottom:16px;">
+      <h2 class="login-title">Mr Novel Explainer</h2>
+      <p class="login-subtitle">क्रिएटर एडमिन पैनल - कहानियां, पोस्टर्स और चैप्टर्स मैनेज करें</p>
+
+      <form id="loginForm">
+        <div class="login-form-group">
+          <label for="adminPasswordInput">एडमिन पासवर्ड (Password):</label>
+          <input type="password" id="adminPasswordInput" class="login-input" placeholder="पासवर्ड दर्ज करें..." required autofocus>
+        </div>
+
+        <button type="submit" class="btn-login-submit">
+          <span>लॉगिन करें (Login) &rarr;</span>
+        </button>
+      </form>
+
+      <div style="margin-top: 24px;">
+        <a href="/" style="color: var(--text-muted); font-size: 13.5px;">&larr; मुख्य वेबसाइट पर वापस जाएं</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       2. ADMIN DASHBOARD (Shown when logged in)
+       ============================================== -->
+  <div id="dashboardSection" style="display: none;">
+    
+    <!-- Top Admin Header -->
+    <header class="admin-header">
+      <div class="admin-brand">
+        <img src="/images/logo.jpg" alt="Logo" class="brand-logo-img" style="width:38px; height:38px;">
+        <div>
+          <span class="admin-title">Mr Novel Explainer Admin</span>
+          <span class="admin-role-badge">CREATOR</span>
+        </div>
+      </div>
+
+      <div class="admin-header-actions">
+        <a href="/" target="_blank" class="btn-admin-action" title="लाइव वेबसाइट देखें">
+          <span>🌐 लाइव वेबसाइट</span>
+        </a>
+        <button id="btnOpenSettings" class="btn-admin-action" title="वेबसाइट सेटिंग्स">
+          <span>⚙️ सेटिंग्स</span>
+        </button>
+        <button id="btnOpenBackup" class="btn-admin-action" title="डेटा बैकअप">
+          <span>💾 बैकअप</span>
+        </button>
+        <button id="btnLogout" class="btn-admin-action btn-admin-logout" title="लॉगआउट">
+          <span>🚪 लॉगआउट</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="admin-container">
+      
+      <!-- Stats Overview -->
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div class="stat-icon-wrap stat-icon-blue">📚</div>
+          <div>
+            <div class="admin-stat-val" id="admStatTotal">0</div>
+            <div class="admin-stat-lbl">कुल कहानियां (Total Novels)</div>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div class="stat-icon-wrap stat-icon-green">🟢</div>
+          <div>
+            <div class="admin-stat-val" id="admStatOngoing">0</div>
+            <div class="admin-stat-lbl">चल रही हैं (Ongoing)</div>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div class="stat-icon-wrap stat-icon-gold">💯</div>
+          <div>
+            <div class="admin-stat-val" id="admStatCompleted">0</div>
+            <div class="admin-stat-lbl">पूरी हो चुकी (Completed)</div>
+          </div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div class="stat-icon-wrap stat-icon-purple">🎧</div>
+          <div>
+            <div class="admin-stat-val" id="admStatChapters">0</div>
+            <div class="admin-stat-lbl">कुल चैप्टर्स (Approx Chapters)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action & Search Toolbar -->
+      <div class="admin-toolbar">
+        <div class="admin-search-wrap">
+          <span class="admin-search-icon">🔍</span>
+          <input type="text" id="adminSearchInput" class="admin-search-input" placeholder="कहानियों में खोजें...">
+        </div>
+
+        <div class="admin-buttons-group">
+          <select id="adminCategoryFilter" class="sort-select" style="padding: 10px 14px; font-size: 13.5px;">
+            <option value="all">सभी श्रेणियां (All Categories)</option>
+            <option value="harem">🔥 हरम / एडल्ट (Harem / 18+)</option>
+            <option value="fantasy">⚔️ फैंटेसी / एक्शन (Fantasy)</option>
+          </select>
+
+          <select id="adminStatusFilter" class="sort-select" style="padding: 10px 14px; font-size: 13.5px;">
+            <option value="all">सभी स्टेटस (All Status)</option>
+            <option value="Ongoing">सिर्फ Ongoing (चल रही हैं)</option>
+            <option value="Completed">सिर्फ Completed (पूर्ण)</option>
+          </select>
+
+          <button id="btnAddNewNovel" class="btn-add-novel">
+            <span>➕ नई कहानी जोड़ें (Add Story)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stories List -->
+      <div class="admin-novels-list" id="adminNovelsList">
+        <!-- Rendered via JS -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==============================================
+       3. ADD / EDIT NOVEL MODAL
+       ============================================== -->
+  <div class="modal-overlay" id="novelModal">
+    <div class="modal-dialog" style="max-width: 720px;">
+      <button class="modal-close-btn" id="novelModalCloseBtn">&times;</button>
+
+      <div style="padding: 28px;">
+        <h2 id="novelModalHeading" style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">
+          ➕ नई कहानी जोड़ें (Add Novel)
+        </h2>
+
+        <form id="novelForm">
+          <input type="hidden" id="formNovelId" value="">
+
+          <div class="form-grid-2">
+            <div>
+              <label class="form-label" for="formTitle">उपन्यास का नाम (English Title) *</label>
+              <input type="text" id="formTitle" class="form-input-full" placeholder="e.g. Rise Of An Immortal" required>
+            </div>
+            <div>
+              <label class="form-label" for="formHindiTitle">हिंदी नाम / सबटाइटिल (Hindi Title)</label>
+              <input type="text" id="formHindiTitle" class="form-input-full" placeholder="e.g. राइज़ ऑफ़ एन इम्मोर्टल">
+            </div>
+          </div>
+
+          <!-- Poster Upload / URL -->
+          <div class="form-group-full">
+            <label class="form-label">पोस्टर इमेज (Poster Image)</label>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <input type="text" id="formPosterUrl" class="form-input-full" placeholder="पोस्टर इमेज URL पेस्ट करें या फ़ाइल चुनें" style="flex: 1; min-width: 200px;">
+              <label class="btn-admin-action" style="cursor: pointer; background: rgba(99,102,241,0.2); border-color: rgba(99,102,241,0.4); color: #c7d2fe;">
+                <span>📁 फ़ाइल अपलोड करें</span>
+                <input type="file" id="formPosterFileInput" accept="image/*" style="display: none;">
+              </label>
+            </div>
+
+            <!-- Preview Thumbnail -->
+            <div class="poster-preview-area">
+              <div class="poster-preview-box">
+                <img id="formPosterPreview" src="/uploads/rise-of-an-immortal.svg" class="poster-preview-img" alt="Preview">
+              </div>
+              <div style="font-size: 12.5px; color: var(--text-dim);">
+                💡 <strong>टिप:</strong> आप अपने कंप्यूटर से JPG/PNG फोटो अपलोड कर सकते हैं, या इंटरनेट की कोई भी इमेज लिंक डाल सकते हैं।
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div>
+              <label class="form-label" for="formCategory">मुख्य श्रेणी (Category) *</label>
+              <select id="formCategory" class="form-input-full">
+                <option value="harem">🔥 हरम / 18+ एडल्ट (Harem / Adult)</option>
+                <option value="fantasy">⚔️ फैंटेसी / एक्शन (Fantasy / Action)</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="formStatus">स्टेटस (Status) *</label>
+              <select id="formStatus" class="form-input-full">
+                <option value="Ongoing">चल रही है (Ongoing)</option>
+                <option value="Completed">पूरी हो चुकी (Completed 💯)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div>
+              <label class="form-label" for="formChapterStatus">चैप्टर स्टेटस टेक्स्ट (Chapter Text) *</label>
+              <input type="text" id="formChapterStatus" class="form-input-full" placeholder="e.g. Adhyay 181 Tak / Complete 💯✅" required>
+            </div>
+            <div>
+              <label class="form-label" for="formLatestChapter">लेटेस्ट चैप्टर नंबर (Chapter Number)</label>
+              <input type="number" id="formLatestChapter" class="form-input-full" placeholder="e.g. 181" value="1">
+            </div>
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="formGenres">शैलियां / टैग्स (Genres, comma separated)</label>
+            <input type="text" id="formGenres" class="form-input-full" placeholder="Cultivation, Action, System, Fantasy">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="formTelegramLink">टेलीग्राम डायरेक्ट लिंक (Telegram Channel / Topic Link)</label>
+            <input type="url" id="formTelegramLink" class="form-input-full" placeholder="https://t.me/yourchannel/181">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="formDescription">कहानी का विवरण / सार (Synopsis in Hindi/English)</label>
+            <textarea id="formDescription" rows="4" class="form-input-full" placeholder="कहानी की मुख्य बातें, बैकस्टोरी और क्या खास है..."></textarea>
+          </div>
+
+          <div class="form-group-full" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+            <input type="checkbox" id="formFeatured" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="formFeatured" style="font-size: 14px; font-weight: 700; color: #ffd700; cursor: pointer;">
+              ★ इस कहानी को वेबसाइट पर 'Featured' बनाएं (टॉप पर हाइलाइट करें)
+            </label>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 18px;">
+            <button type="button" class="btn-admin-action" id="btnCancelNovelModal">रद्द करें (Cancel)</button>
+            <button type="submit" class="btn-add-novel" id="btnSaveNovelSubmit">
+              <span>💾 कहानी सेव करें (Save Novel)</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       4. SETTINGS MODAL
+       ============================================== -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <button class="modal-close-btn" id="settingsModalCloseBtn">&times;</button>
+
+      <div style="padding: 28px;">
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">
+          ⚙️ वेबसाइट और टेलीग्राम सेटिंग्स
+        </h2>
+
+        <form id="settingsForm">
+          <div class="form-group-full">
+            <label class="form-label" for="setSiteName">वेबसाइट का नाम (Website Name)</label>
+            <input type="text" id="setSiteName" class="form-input-full" placeholder="Novel Vani - Hindi Audio Novels">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="setTagline">टैगलाइन / सबटाइटिल (Tagline)</label>
+            <input type="text" id="setTagline" class="form-input-full" placeholder="पॉपुलर वेब नोवेल्स की हिंदी AI ऑडियो">
+          </div>
+
+          <div class="form-grid-2">
+            <div>
+              <label class="form-label" for="setTgChannelName">टेलीग्राम चैनल का नाम (@Username)</label>
+              <input type="text" id="setTgChannelName" class="form-input-full" placeholder="@HindiAudioNovels">
+            </div>
+            <div>
+              <label class="form-label" for="setTgChannelLink">टेलीग्राम चैनल लिंक (Full URL)</label>
+              <input type="url" id="setTgChannelLink" class="form-input-full" placeholder="https://t.me/HindiAudioNovels">
+            </div>
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="setTgDiscussionLink">टेलीग्राम डिस्कशन ग्रुप लिंक (Telegram Group / Chat Link)</label>
+            <input type="url" id="setTgDiscussionLink" class="form-input-full" placeholder="https://t.me/HindiAudioNovelsChat या t.me/+InviteLink">
+          </div>
+
+          <div class="form-group-full">
+            <label class="form-label" for="setBannerNotice">शीर्ष सूचना पट्टी (Top Notice Banner Text)</label>
+            <textarea id="setBannerNotice" rows="2" class="form-input-full" placeholder="🔥 रोजाना नए अध्यायों की हिंदी ऑडियो सुनने के लिए हमारे टेलीग्राम चैनल को जॉइन करें!"></textarea>
+          </div>
+
+          <div class="form-group-full" style="border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 16px; margin-top: 16px;">
+            <label class="form-label" for="setNewPassword" style="color: #f87171;">नया एडमिन पासवर्ड (खाली छोड़ें यदि नहीं बदलना है)</label>
+            <input type="password" id="setNewPassword" class="form-input-full" placeholder="नया पासवर्ड दर्ज करें...">
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+            <button type="button" class="btn-admin-action" id="btnCancelSettingsModal">रद्द करें</button>
+            <button type="submit" class="btn-add-novel">
+              <span>💾 सेटिंग्स सेव करें</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================
+       5. BACKUP & RESTORE MODAL
+       ============================================== -->
+  <div class="modal-overlay" id="backupModal">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <button class="modal-close-btn" id="backupModalCloseBtn">&times;</button>
+
+      <div style="padding: 28px;">
+        <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 12px;">
+          💾 डेटा बैकअप और रिस्टोर
+        </h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">
+          अपनी सभी कहानियों और सेटिंग्स का सुरक्षित बैकअप JSON फ़ाइल में डाउनलोड करें, ताकि आपका डेटा कभी न खोए।
+        </p>
+
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px;">
+          <h4 style="margin-bottom: 8px;">1. बैकअप डाउनलोड करें (Export)</h4>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">अपनी सभी कहानियों की एक क्लिक में JSON फ़ाइल डाउनलोड करें।</p>
+          <button id="btnDownloadBackup" class="btn-admin-action" style="background: rgba(34,158,217,0.2); border-color: rgba(34,158,217,0.4); color: #fff;">
+            <span>📥 बैकअप डाउनलोड करें (Export JSON)</span>
+          </button>
+        </div>
+
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px;">
+          <h4 style="margin-bottom: 8px;">2. बैकअप रिस्टोर करें (Import)</h4>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">पुरानी बैकअप JSON फ़ाइल को चुनकर डेटा दोबारा लोड करें।</p>
+          <input type="file" id="backupFileInput" accept=".json" style="font-size: 13px; color: var(--text-muted);">
+          <div style="margin-top: 12px;">
+            <button id="btnRestoreBackup" class="btn-admin-action" style="background: rgba(16,185,129,0.2); border-color: rgba(16,185,129,0.4); color: #fff;">
+              <span>⚡ रिस्टोर करें (Restore)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div class="toast-notice" id="toastNotice">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">सफलतापूर्वक सेव हो गया!</span>
+  </div>
+
+  <script src="/js/admin.js?v=3.2"></script>
+</body>
+</html>
